@@ -1,15 +1,17 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import { useQuery } from '@apollo/client'
 import GetTransactions from '../gql/transactions.gql'
 import { TxTable } from '../components/transactions/TxTable'
 
-/* global fetch:false */
-
-export function Home () {
+export function Home() {
   let { loading, error, data = {} } = useQuery(GetTransactions)
+  let parsedRows = []
+  const setParsedRows = (parsedData) => {
+    console.log(parsedData)
+    parsedRows = parsedData
+  }
   const parseCsvString = (csvString) => {
     const csvLines = csvString.split(/\n/)
-    console.log(csvLines)
     let row
     let id
     let userId
@@ -18,7 +20,7 @@ export function Home () {
     let debit
     let credit
     let amount
-    const parsedRows = []
+    const result = []
     for (let i = 1; i < csvLines.length; i++) {
       // id,user_id,description,merchant_id,debit,credit,amount
       row = csvLines[i].split(',')
@@ -38,16 +40,20 @@ export function Home () {
         credit,
         amount
       }
-      parsedRows.push(row)
+      result.push(row)
     }
-    return parsedRows
+    return result
   }
+  const [dataIsReturned, setDataIsReturned] = useState(false)
   if (data && Object.keys(data).length === 0 && Object.getPrototypeOf(data) === Object.prototype) {
     fetch('http://localhost:3000/data.csv')
       .then(response => response.text())
-      .then(response => {
-        data = parseCsvString(response)
-        console.log(data)
+      .then(response => parseCsvString(response))
+      .then(parsedData => {
+        setParsedRows(parsedData)
+      })
+      .then(() => {
+        setDataIsReturned(true)
       })
   }
 
@@ -66,10 +72,12 @@ export function Home () {
       </Fragment>
     )
   }
-
+  console.log(parsedRows)
   return (
     <Fragment>
-      <TxTable data={data.transactions} />
+      {
+        dataIsReturned ? <TxTable data={parsedRows} /> : <h1>Loading...</h1>
+      }
     </Fragment>
   )
 }
