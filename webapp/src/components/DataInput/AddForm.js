@@ -1,6 +1,9 @@
 import React, { Fragment } from 'react'
+import { useDispatch } from 'react-redux'
+import { pushData } from '../../store/parserSlice'
 
-const AddForm = ({ onsubmit }) => {
+const AddForm = () => {
+  const dispatch = useDispatch()
   let id = ''
   let userId = ''
   let description = ''
@@ -10,21 +13,28 @@ const AddForm = ({ onsubmit }) => {
   let amount = ''
 
   const setData = (type, data) => {
-    switch(type) {
+    switch (type) {
       case 'id':
         id = data
+        break
       case 'userId':
         userId = data
+        break
       case 'description':
         description = data
+        break
       case 'merchantId':
         merchantId = data
+        break
       case 'debit':
         debit = data
+        break
       case 'credit':
         credit = data
+        break
       case 'amount':
         amount = data
+        break
     }
   }
   const handleSubmit = (e) => {
@@ -38,7 +48,7 @@ const AddForm = ({ onsubmit }) => {
       credit,
       amount
     }
-    onsubmit('add', data)
+    dispatch(pushData(data))
   }
   return (
     <Fragment>

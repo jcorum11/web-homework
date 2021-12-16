@@ -1,27 +1,24 @@
-import React, { Fragment, useEffect, useState } from 'react'
-import { arrayOf, string, bool, number, shape } from 'prop-types'
+import React, { Fragment } from 'react'
 import { css } from '@emotion/core'
 import DataInput from '../DataInput'
+import { useSelector } from 'react-redux'
 
 const styles = css`
  .header {
    font-weight: bold;
  }
+ .header__cell {
+   
+ }
+ .row__cell {
+   padding: 0 2rem 0 0
+ }
+
 `
 
 const makeDataTestId = (transactionId, fieldName) => `transaction-${transactionId}-${fieldName}`
-export function TxTable({ data }) {
-  console.log(data)
-  const dataMapped = data.map(row => {
-    return row
-  })
-  const [parsedData, setParsedData] = useState(dataMapped)
-  const addToTable = (inputData) => {
-    setParsedData([...dataMapped, inputData])
-  }
-  const editTable = (editedData) => {
-    setParsedData(editedData)
-  }
+export function TxTable () {
+  const parsedDataStore = useSelector(state => state.parser.value)
   return (
     <Fragment>
       <table css={styles}>
@@ -36,38 +33,25 @@ export function TxTable({ data }) {
             <td >Amount</td>
           </tr>
           {
-            parsedData.map(tx => {
+            parsedDataStore.map(tx => {
               const { id, userId, description, merchantId, debit, credit, amount } = tx
               return (
-                <tr data-testid={`transaction-${id}`} key={`transaction-${id}`}>
-                  <td data-testid={makeDataTestId(id, 'id')}>{id}</td>
-                  <td data-testid={makeDataTestId(id, 'userId')}>{userId}</td>
-                  <td data-testid={makeDataTestId(id, 'description')}>{description}</td>
-                  <td data-testid={makeDataTestId(id, 'merchant')}>{merchantId}</td>
-                  <td data-testid={makeDataTestId(id, 'debit')}>{debit}</td>
-                  <td data-testid={makeDataTestId(id, 'credit')}>{credit}</td>
-                  <td data-testid={makeDataTestId(id, 'amount')}>{amount}</td>
+                <tr className='row' data-testid={`transaction-${id}`} key={`transaction-${id}`}>
+                  <td className='row__cell' data-testid={makeDataTestId(id, 'id')}>{id}</td>
+                  <td className='row__cell' data-testid={makeDataTestId(id, 'userId')}>{userId}</td>
+                  <td className='row__cell' data-testid={makeDataTestId(id, 'description')}>{description}</td>
+                  <td className='row__cell' data-testid={makeDataTestId(id, 'merchant')}>{merchantId}</td>
+                  <td className='row__cell' data-testid={makeDataTestId(id, 'debit')}>{debit}</td>
+                  <td className='row__cell' data-testid={makeDataTestId(id, 'credit')}>{credit}</td>
+                  <td className='row__cell' data-testid={makeDataTestId(id, 'amount')}>{amount}</td>
                 </tr>
               )
             })
           }
         </tbody>
       </table>
-      <DataInput editTable={(e) => { editTable(e) }} addToTable={(e) => { addToTable(e) }} data={parsedData} />
+      <DataInput />
     </Fragment >
 
   )
-}
-
-
-TxTable.propTypes = {
-  data: arrayOf(shape({
-    id: string,
-    user_id: string,
-    description: string,
-    merchant_id: string,
-    debit: bool,
-    credit: bool,
-    amount: number
-  }))
 }

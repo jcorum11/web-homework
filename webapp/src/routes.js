@@ -12,9 +12,9 @@ function AppRouter () {
             <li>
               <Link to='/'>Home</Link>
             </li>
-            <li>
+            {/* <li>
               <Link to='/another'>Another route</Link>
-            </li>
+            </li> */}
           </ul>
         </nav>
         <div className='main-content' css={contentStyle}>
@@ -42,7 +42,7 @@ const navStyle = css`
       flex-direction: row;
       list-style-type: none;
   }
-  
+
   & > ul > li:not(:first-of-type) {
     margin-left: 16px;
   }

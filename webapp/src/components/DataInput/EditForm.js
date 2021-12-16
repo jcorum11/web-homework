@@ -1,27 +1,55 @@
-import React, { Fragment } from 'react';
+import React, { Fragment } from 'react'
+import { useDispatch } from 'react-redux'
+import { updateData } from '../../store/parserSlice'
 
-const EditForm = ({data, onsubmit}) => {
-  const dataWritable = data.map(row => {
-    return row
-  })
-  const newData = {}
+const EditForm = () => {
+  const dispatch = useDispatch()
+  let id = ''
+  let userId = ''
+  let description = ''
+  let merchantId = ''
+  let debit = ''
+  let credit = ''
+  let amount = ''
+  let handleChange = (type, value) => {
+    switch (type) {
+      case 'id':
+        id = value
+        break
+      case 'userId':
+        userId = value
+        break
+      case 'description':
+        description = value
+        break
+      case 'merchantId':
+        merchantId = value
+        break
+      case 'debit':
+        debit = value
+        break
+      case 'credit':
+        credit = value
+        break
+      case 'amount':
+        amount = value
+        break
+    }
+  }
   const handleSubmit = (e) => {
     e.preventDefault()
-    dataWritable.forEach(row => {
-      if (row.id === newData.id) {
-        row.userId = newData.userId
-        row.description = newData.description
-        row.merchantId = newData.merchantId
-        row.debit = newData.debit
-        row.credit = newData.credit
-        row.amount = newData.amount
-      }
-    })
-    onsubmit('edit', dataWritable)
+    const editedData = {
+      id: id,
+      userId: userId,
+      description: description,
+      merchantId: merchantId,
+      debit: debit,
+      credit: credit,
+      amount: amount
+    }
+    dispatch(updateData(editedData))
   }
-  const handleChange = (dataType, value) => {
-    newData[dataType] = value
-  }
+
   return (
     <Fragment>
       <form id='editForm' onSubmit={e => handleSubmit(e)}>
@@ -40,7 +68,7 @@ const EditForm = ({data, onsubmit}) => {
         <label htmlFor='amount'>Amount</label>
         <input name='amount' onChange={e => handleChange('amount', e.target.value)} type='text' />
       </form>
-      <button type='submit' form='editForm'>Edit</button>
+      <button form='editForm' type='submit'>Edit</button>
     </Fragment>
   )
 }
