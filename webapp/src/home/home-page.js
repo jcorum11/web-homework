@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { TxTable } from '../components/transactions/TxTable'
 import { useDispatch } from 'react-redux'
-import { overwriteData, romanizeData } from '../store/parserSlice'
+import { overwriteData } from '../store/parserSlice'
 
 /* global fetch:false */
 
@@ -57,16 +57,12 @@ export function Home () {
         console.error('error: ', e)
       })
   }, [])
-  const romanize = () => {
-    dispatch(romanizeData())
-  }
 
   return (
     <Fragment>
       {
         dataIsReturned ? <TxTable /> : <h1>Loading...</h1>
       }
-      <button onClick={romanize}>Romanize!</button>
     </Fragment>
   )
 }

@@ -42,10 +42,40 @@ export const parserSlice = createSlice({
       state.value.forEach((row) => {
         row.id = romanize(row.id)
       })
+    },
+    arabizeData: (state) => {
+      function arabize (s) {
+        let lookup = { M: 1000, CM: 900, D: 500, CD: 400, C: 100, XC: 90, L: 50, XL: 40, X: 10, IX: 9, V: 5, IV: 4, I: 1 }
+        const array = s.split('')
+
+        let arab = 0
+        let current
+        let currentValue
+        let next
+        let nextValue
+
+        for (let i = 0; i < array.length; i++) {
+          current = array[i]
+          currentValue = lookup[current]
+
+          next = array[i + 1]
+          nextValue = lookup[next]
+
+          if (currentValue < nextValue) {
+            arab -= (currentValue)
+          } else {
+            arab += (currentValue)
+          }
+        }
+        return arab
+      }
+      state.value.forEach((row) => {
+        row.id = arabize(row.id)
+      })
     }
   }
 })
 
-export const { pushData, overwriteData, updateData, deleteData, romanizeData } = parserSlice.actions
+export const { pushData, overwriteData, updateData, deleteData, romanizeData, arabizeData } = parserSlice.actions
 
 export default parserSlice.reducer
