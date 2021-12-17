@@ -70,17 +70,17 @@ const Form = ({ formType }) => {
     return (
       <Fragment>
         <div css={formSection}>
-          <label css={label} htmlFor='id'>ID:<input css={input} name='id' onChange={e => handleChange('id', e.target.value)} type='text' /></label>
-          <label css={label} htmlFor='userId'>User Id:<input css={input} name='userId' onChange={e => handleChange('userId', e.target.value)} type='text' /></label>
-          <label css={label} htmlFor='description'>Description:<input css={input} name='description' onChange={e => handleChange('description', e.target.value)} type='text' /></label>
+          <label css={formLabel} htmlFor='id'>ID:<input css={formInput} name='id' onChange={e => handleChange('id', e.target.value)} type='text' /></label>
+          <label css={formLabel} htmlFor='userId'>User Id:<input css={formInput} name='userId' onChange={e => handleChange('userId', e.target.value)} type='text' /></label>
+          <label css={formLabel} htmlFor='description'>Description:<input css={formInput} name='description' onChange={e => handleChange('description', e.target.value)} type='text' /></label>
         </div>
         <div css={formSection}>
-          <label css={label} htmlFor='merchantId'>Merchant Id:<input css={input} name='merchantId' onChange={e => handleChange('merchantId', e.target.value)} type='text' /></label>
-          <label css={label} htmlFor='debit'>Debit:<input css={input} name='debit' onChange={e => handleChange('debit', e.target.value)} type='text' /></label>
-          <label css={label} htmlFor='credit'>Credit:<input css={input} name='credit' onChange={e => handleChange('credit', e.target.value)} type='text' /></label>
+          <label css={formLabel} htmlFor='merchantId'>Merchant Id:<input css={formInput} name='merchantId' onChange={e => handleChange('merchantId', e.target.value)} type='text' /></label>
+          <label css={formLabel} htmlFor='debit'>Debit:<input css={formInput} name='debit' onChange={e => handleChange('debit', e.target.value)} type='text' /></label>
+          <label css={formLabel} htmlFor='credit'>Credit:<input css={formInput} name='credit' onChange={e => handleChange('credit', e.target.value)} type='text' /></label>
         </div>
         <div css={[formSection, formSectionBottom]}>
-          <label css={label} htmlFor='amount'>Amount:<input css={input} name='amount' onChange={e => handleChange('amount', e.target.value)} type='text' /></label>
+          <label css={formLabel} htmlFor='amount'>Amount:<input css={formInput} name='amount' onChange={e => handleChange('amount', e.target.value)} type='text' /></label>
         </div>
       </Fragment>
     )
@@ -88,14 +88,14 @@ const Form = ({ formType }) => {
 
   const DeleteSection = () => {
     return (
-      <div css={formSection}><label css={label} htmlFor='id'>ID:<input css={input} name='id' onChange={e => handleChange('id', e.target.value)} type='text' /></label></div>
+      <div css={formSection}><label css={formLabel} htmlFor='id'>ID:<input css={formInput} name='id' onChange={e => handleChange('id', e.target.value)} type='text' /></label></div>
     )
   }
 
   return (
     <Fragment>
-      <div css={container}>
-        <div css={border}>
+      <div css={formContainer}>
+        <div css={formBorder}>
           <button css={formBtn} form={`${formType}Form`} type='submit'>{formType}</button>
           <form css={form} id={`${formType}Form`} onSubmit={handleSubmit}>
             {(formType === 'Add' || formType === 'Edit') && <AddOrEditSections />}
@@ -130,21 +130,21 @@ margin: 1rem 0 0 0;
 const formSectionBottom = css`
 margin-bottom: 2rem;
 `
-const border = css`
+const formBorder = css`
 border: 1px solid;
 border-radius: 1rem;
 padding: 0;
 height: 100%;
 display: flex;
 `
-const container = css`
+const formContainer = css`
 height: 11vh;
 margin-bottom: 1rem;
 `
-const input = css`
+const formInput = css`
 margin: 0 0 0 0.5rem;
 `
-const label = css`
+const formLabel = css`
 margin-left: 0.5rem;
 `
 

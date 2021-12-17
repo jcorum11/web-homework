@@ -53,7 +53,7 @@ export function TxTable () {
               </tbody>
             </table>
           </div>
-          {roman ? <button css={romanizeBtn} onClick={arabize}>Arabize!</button> : <button css={romanizeBtn} onClick={romanize}>Romanize!</button>}
+          {roman ? <button css={tableRomanizeBtn} onClick={arabize}>Arabize!</button> : <button css={tableRomanizeBtn} onClick={romanize}>Romanize!</button>}
         </div>
         <DataInput />
       </div>
@@ -76,7 +76,7 @@ border: 1px solid;
 
 border-radius: 1rem;
 `
-const romanizeBtn = css`
+const tableRomanizeBtn = css`
 width: 100%;
 border-bottom-right-radius: 1rem;
 border-bottom-left-radius: 1rem;
