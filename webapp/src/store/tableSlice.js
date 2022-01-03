@@ -7,9 +7,7 @@ export const tableSlice = createSlice({
     currentTransaction: NaN,
     currentTransactionType: '',
     currentAmount: NaN,
-    currentInputType: '',
     idBeingHoveredOver: '',
-    isRow: true,
     activeRow: {}
   },
   reducers: {
@@ -110,19 +108,23 @@ export const tableSlice = createSlice({
     setCurrentTransaction: (state, action) => {
       state.currentTransaction = Number(action.payload)
     },
-    setCurrentInputType: (state, action) => {
-      state.currentInputType = action.payload
-    },
     setIdBeingHoveredOver: (state, action) => {
       state.idBeingHoveredOver = action.payload
-    },
-    setIsRow: (state, action) => {
-      state.isRow = action.payload
     },
     setActiveRow: (state, action) => {
       for (let row of state.allRows) {
         if (row.id === action.payload) {
           state.activeRow = row
+        }
+      }
+    },
+    addRowBeneathId: (state, action) => {
+      const newRowId = Number(action.payload.id) + 1
+      action.payload.data.id = newRowId.toString()
+      for (let [index, row] of state.allRows.entries()) {
+        if (row.id === newRowId) {
+          state.allRows.splice(index + 1, 0, action.payload.data)
+          console.log(state.allRows)
         }
       }
     }
@@ -132,11 +134,8 @@ export const tableSlice = createSlice({
 export const selectAllRows = state => state.table.allRows
 export const selectCurrentTransaction = state => state.table.currentTransaction
 export const selectCurrentAmount = state => state.table.currentAmount
-export const selectCurrentTransactionType = state => state.table.currentTransactionType
-export const selectCurrentInputType = state => state.table.currentInputType
 export const selectIdBeingHoveredOver = state => state.table.idBeingHoveredOver
-export const selectIsRow = state => state.table.isRow
 export const selectActiveRow = state => state.table.activeRow
-export const { pushData, overwriteData, updateData, deleteData, romanizeData, arabizeData, setCurrentTransactionType, setCurrentAmount, setCurrentTransaction, setCurrentInputType, setIdBeingHoveredOver, setIsRow, setActiveRow } = tableSlice.actions
+export const { pushData, overwriteData, updateData, deleteData, romanizeData, arabizeData, setCurrentTransactionType, setCurrentAmount, setCurrentTransaction, setIdBeingHoveredOver, setActiveRow, addRowBeneathId } = tableSlice.actions
 
 export default tableSlice.reducer

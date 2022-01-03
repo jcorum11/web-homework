@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react'
 import { css } from '@emotion/core'
 import { useDispatch, useSelector } from 'react-redux'
-import { setCurrentInputType, deleteData, setIdBeingHoveredOver, selectIdBeingHoveredOver, setActiveRow } from '../../store/tableSlice'
+import { deleteData, setIdBeingHoveredOver, selectIdBeingHoveredOver, setActiveRow } from '../../store/tableSlice'
 import Form from '../Form'
 import { object } from 'prop-types'
 
@@ -9,10 +9,12 @@ const TableRow = ({ row }) => {
   const idBeingHoveredOver = useSelector(selectIdBeingHoveredOver)
   const [isRow, setIsRow] = useState(true)
   const dispatch = useDispatch()
+  const [currentInputType, setCurrentInputType] = useState('')
   const handleClick = (type, id = undefined) => {
     switch (type) {
       case 'add':
-        dispatch(setCurrentInputType(type))
+        setCurrentInputType(type)
+        dispatch(setActiveRow(id))
         break
       case 'edit':
         dispatch(setCurrentInputType(type))
@@ -24,6 +26,7 @@ const TableRow = ({ row }) => {
         break
       case 'cancel':
         setIsRow(true)
+        setCurrentInputType('')
     }
   }
   const handleHover = (id) => {
@@ -47,7 +50,8 @@ const TableRow = ({ row }) => {
   }
   return (
     <Fragment>
-      {isRow ? <Row /> : <Form handleClick={handleClick} row={row} />}
+      {isRow ? <Row /> : <Form currentInputType={currentInputType} handleClick={handleClick} row={row} />}
+      {currentInputType === 'add' && <Form currentInputType={currentInputType} handleClick={handleClick} row={row} />}
     </Fragment>
   )
 }

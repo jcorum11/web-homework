@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
-import { func, object } from 'prop-types'
+import React, { Fragment, useState } from 'react'
+import { func, object, string } from 'prop-types'
 import { useDispatch } from 'react-redux'
-import { pushData, updateData } from '../../store/tableSlice'
+import { addRowBeneathId, updateData } from '../../store/tableSlice'
 
-const Form = ({ handleClick, row }) => {
+const Form = ({ handleClick, row, currentInputType }) => {
   const [inputValues, setInputValues] = useState(row)
   const dispatch = useDispatch()
   const handleSubmit = (type) => {
@@ -18,7 +18,8 @@ const Form = ({ handleClick, row }) => {
     }
     switch (type) {
       case 'add':
-        dispatch(pushData(data))
+        dispatch(addRowBeneathId({ id: row.id, data }))
+        handleClick('cancel')
         break
       case 'edit':
         dispatch(updateData(data))
@@ -54,60 +55,28 @@ const Form = ({ handleClick, row }) => {
     }
   }
   return (
-    <tr >
-      <td><input name='id' onChange={(e) => handleChange('id', e)} type='text' value={inputValues.id} /></td>
-      <td><input name='userId' onChange={(e) => handleChange('userId', e)} type='text' value={inputValues.userId} /></td>
-      <td><input name='description' onChange={(e) => handleChange('description', e)} type='text' value={inputValues.description} /></td>
-      <td><input name='merchantId' onChange={(e) => handleChange('merchantId', e)} type='text' value={inputValues.merchantId} /></td>
-      <td><input name='debit' onChange={(e) => handleChange('debit', e)} type='text' value={inputValues.debit} /></td>
-      <td><input name='credit' onChange={(e) => handleChange('credit', e)} type='text' value={inputValues.credit} /></td>
-      <td><input name='amount' onChange={(e) => handleChange('amount', e)} type='text' value={inputValues.amount} /></td>
-      <td><button onClick={() => handleSubmit('edit')} type='button'>Update</button></td>
-      <td><button onClick={() => handleClick('cancel')} type='button'>Cancel</button></td>
-    </tr>
+    <Fragment>
+      <tr >
+        <td><input name='id' onChange={(e) => handleChange('id', e)} type='text' value={inputValues.id} /></td>
+        <td><input name='userId' onChange={(e) => handleChange('userId', e)} type='text' value={inputValues.userId} /></td>
+        <td><input name='description' onChange={(e) => handleChange('description', e)} type='text' value={inputValues.description} /></td>
+        <td><input name='merchantId' onChange={(e) => handleChange('merchantId', e)} type='text' value={inputValues.merchantId} /></td>
+        <td><input name='debit' onChange={(e) => handleChange('debit', e)} type='text' value={inputValues.debit} /></td>
+        <td><input name='credit' onChange={(e) => handleChange('credit', e)} type='text' value={inputValues.credit} /></td>
+        <td><input name='amount' onChange={(e) => handleChange('amount', e)} type='text' value={inputValues.amount} /></td>
+        <td><button onClick={() => handleSubmit(currentInputType)} type='button'>{currentInputType === 'add' ? 'Add' : 'Update'}</button></td>
+        <td><button onClick={() => handleClick('cancel')} type='button'>Cancel</button></td>
+      </tr>
+      {}
+    </Fragment>
+
   )
 }
 
 Form.propTypes = {
   handleClick: func,
-  row: object
+  row: object,
+  currentInputType: string
 }
-
-// const form = css`
-// width: 100%;
-// `
-// const formBtn = css`
-// height: 100%;
-// border-top-left-radius: 1rem;
-// border-bottom-left-radius: 1rem;
-// width: 4rem;
-// background-color: teal;
-// color: white;
-// `
-// const formSection = css`
-// display: grid;
-// grid-template-columns: repeat(3, 1fr);
-// margin: 1rem 0 0 0;
-// `
-// const formSectionBottom = css`
-// margin-bottom: 2rem;
-// `
-// const formBorder = css`
-// border: 1px solid;
-// border-radius: 1rem;
-// padding: 0;
-// height: 100%;
-// display: flex;
-// `
-// const formContainer = css`
-// height: 11vh;
-// margin-bottom: 1rem;
-// `
-// const formInput = css`
-// margin: 0 0 0 0.5rem;
-// `
-// const formLabel = css`
-// margin-left: 0.5rem;
-// `
 
 export default Form

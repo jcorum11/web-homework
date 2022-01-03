@@ -1,4 +1,4 @@
-import reducer, { pushData, overwriteData, updateData, deleteData, romanizeData, arabizeData, setCurrentTransactionType, setCurrentAmount, setCurrentTransaction, setCurrentInputType, setIdBeingHoveredOver, setIsRow, setActiveRow } from '../tableSlice'
+import reducer, { pushData, overwriteData, updateData, deleteData, romanizeData, arabizeData, setCurrentTransactionType, setCurrentAmount, setCurrentTransaction, setIdBeingHoveredOver, setActiveRow, addRowBeneathId } from '../tableSlice'
 
 let previousState = {
   allRows: [
@@ -27,9 +27,7 @@ let previousState = {
   currentTransaction: Math.random() * 100,
   currentTransactionType: 'Credit',
   currentAmount: 0,
-  currentInputType: '',
   idBeingHoveredOver: '',
-  isRow: true,
   activeRow: {}
 }
 let data = {
@@ -67,9 +65,7 @@ const cleanup = () => {
     currentTransaction: Math.random() * 100,
     currentTransactionType: 'Credit',
     currentAmount: 0,
-    currentInputType: '',
     idBeingHoveredOver: '',
-    isRow: true,
     activeRow: {}
   }
   data = {
@@ -87,9 +83,7 @@ describe('parserSlice', () => {
       currentTransaction: NaN,
       currentTransactionType: '',
       currentAmount: NaN,
-      currentInputType: '',
       idBeingHoveredOver: '',
-      isRow: true,
       activeRow: {}
     })
   })
@@ -191,25 +185,22 @@ describe('parserSlice', () => {
     cleanup()
   })
 
-  it('overwrites currentInputType with setCurrentInputType', () => {
-    const returned = reducer(previousState, setCurrentInputType('add'))
-    expect(returned.currentInputType).toEqual('add')
-    cleanup()
-  })
-
   it('overwrites idBeingHoveredOver with setIdBeingHoveredOver', () => {
     const returned = reducer(previousState, setIdBeingHoveredOver('42'))
     expect(returned.idBeingHoveredOver).toEqual('42')
-    cleanup()
-  })
-  it('overwrites isRow with setIsRow', () => {
-    const returned = reducer(previousState, setIsRow('42'))
-    expect(returned.isRow).toEqual('42')
     cleanup()
   })
   it('gets the active row being edited and overwrites activeRow with setActiveRow', () => {
     const received = reducer(previousState, setActiveRow('42'))
     expect(received.activeRow).toEqual(previousState.allRows[2])
     cleanup()
+  })
+  it('adds a row beneath a defined id, assigns an auto-incrementing id, and calculates amount with addRowBeneathId', () => {
+    delete data.id
+    const received = reducer(previousState, addRowBeneathId({ id: '42', data }))
+    cleanup()
+    data.id = '43'
+    console.log(received.allRows)
+    expect(received.allRows[3]).toEqual(data)
   })
 })
