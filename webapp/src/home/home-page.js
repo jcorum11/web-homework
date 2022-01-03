@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { TxTable } from '../components/transactions/TxTable'
+import { Table } from '../components/Table'
 import { useDispatch } from 'react-redux'
-import { overwriteData } from '../store/parserSlice'
+import { overwriteData } from '../store/tableSlice'
 
 /* global fetch:false */
 
@@ -61,7 +61,7 @@ export function Home () {
   return (
     <Fragment>
       {
-        dataIsReturned ? <TxTable /> : <h1>Loading...</h1>
+        dataIsReturned ? <Table /> : <h1>Loading...</h1>
       }
     </Fragment>
   )

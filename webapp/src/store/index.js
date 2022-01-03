@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
-import parserReducer from './parserSlice'
+import tableReducer from './tableSlice'
 
 export default configureStore({
   reducer: {
-    parser: parserReducer
+    table: tableReducer
   }
 })
