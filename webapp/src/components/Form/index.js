@@ -5,7 +5,16 @@ import { addRowBeneathId, setIsRowBeingEdited, updateData } from '../../store/ta
 import { css } from '@emotion/core'
 
 const Form = ({ handleClick, row, currentInputType }) => {
-  const [inputValues, setInputValues] = useState(row)
+  const emptyRow = {
+    id: '',
+    userId: '',
+    description: '',
+    merchantId: '',
+    debit: '',
+    credit: '',
+    amount: ''
+  }
+  const [inputValues, setInputValues] = useState(currentInputType === 'add' ? emptyRow : row)
   const dispatch = useDispatch()
   const handleSubmit = (type) => {
     const data = {
