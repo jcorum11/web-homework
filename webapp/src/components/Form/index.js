@@ -60,15 +60,15 @@ const Form = ({ handleClick, row, currentInputType }) => {
   return (
     <Fragment>
       <tr >
-        <td><input css={currentInputType === 'add' ? idInput : ''} name='id' onChange={(e) => handleChange('id', e)} type='text' value={inputValues.id} /></td>
-        <td><input name='userId' onChange={(e) => handleChange('userId', e)} type='text' value={inputValues.userId} /></td>
-        <td><input name='description' onChange={(e) => handleChange('description', e)} type='text' value={inputValues.description} /></td>
-        <td><input name='merchantId' onChange={(e) => handleChange('merchantId', e)} type='text' value={inputValues.merchantId} /></td>
-        <td><input name='debit' onChange={(e) => handleChange('debit', e)} type='text' value={inputValues.debit} /></td>
-        <td><input name='credit' onChange={(e) => handleChange('credit', e)} type='text' value={inputValues.credit} /></td>
-        <td><input name='amount' onChange={(e) => handleChange('amount', e)} type='text' value={inputValues.amount} /></td>
-        <td><button onClick={() => handleSubmit(currentInputType)} type='button'>{currentInputType === 'add' ? 'Add' : 'Update'}</button></td>
-        <td><button onClick={() => handleClick('cancel')} type='button'>Cancel</button></td>
+        <td><input css={currentInputType === 'add' ? idInputHidden : inputStyle} name='id' onChange={(e) => handleChange('id', e)} type='text' value={inputValues.id} /></td>
+        <td><input css={inputStyle} name='userId' onChange={(e) => handleChange('userId', e)} type='text' value={inputValues.userId} /></td>
+        <td><input css={inputStyle} name='description' onChange={(e) => handleChange('description', e)} type='text' value={inputValues.description} /></td>
+        <td><input css={inputStyle} name='merchantId' onChange={(e) => handleChange('merchantId', e)} type='text' value={inputValues.merchantId} /></td>
+        <td><input css={inputStyle} name='debit' onChange={(e) => handleChange('debit', e)} type='text' value={inputValues.debit} /></td>
+        <td><input css={inputStyle} name='credit' onChange={(e) => handleChange('credit', e)} type='text' value={inputValues.credit} /></td>
+        <td><input css={inputStyle} name='amount' onChange={(e) => handleChange('amount', e)} type='text' value={inputValues.amount} /></td>
+        <td><button css={btn} onClick={() => handleSubmit(currentInputType)} type='button'>{currentInputType === 'add' ? 'Add' : 'Update'}</button></td>
+        <td><button css={btn} onClick={() => handleClick('cancel')} type='button'>Cancel</button></td>
       </tr>
       {}
     </Fragment>
@@ -82,8 +82,20 @@ Form.propTypes = {
   currentInputType: string
 }
 
-const idInput = css`
+const idInputHidden = css`
 visibility: hidden
+`
+
+const inputStyle = css`
+background-color: teal;
+color: white;
+border-radius: 5px;
+`
+
+const btn = css`
+border-radius: 100px;
+background-color: teal;
+color: white;
 `
 
 export default Form

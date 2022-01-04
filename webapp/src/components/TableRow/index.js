@@ -78,6 +78,9 @@ visibility: hidden;
 `
 const buttonVisible = css`
 visibility: visible;
+border-radius: 100px;
+background-color: teal;
+color: white;
 `
 const tableRowCell = css`
 padding: 0 2rem 0 0;
