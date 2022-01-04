@@ -60,7 +60,7 @@ const Form = ({ handleClick, row, currentInputType }) => {
   return (
     <Fragment>
       <tr >
-        <td><input css={idInput} name='id' onChange={(e) => handleChange('id', e)} type='text' value={inputValues.id} /></td>
+        <td><input css={currentInputType === 'add' ? idInput : ''} name='id' onChange={(e) => handleChange('id', e)} type='text' value={inputValues.id} /></td>
         <td><input name='userId' onChange={(e) => handleChange('userId', e)} type='text' value={inputValues.userId} /></td>
         <td><input name='description' onChange={(e) => handleChange('description', e)} type='text' value={inputValues.description} /></td>
         <td><input name='merchantId' onChange={(e) => handleChange('merchantId', e)} type='text' value={inputValues.merchantId} /></td>
