@@ -49,7 +49,7 @@ const TableRow = ({ row }) => {
 
   const Row = () => {
     return (
-      <tr css={row} data-testid={`transaction-${row.id}`} onMouseEnter={() => handleHover(row.id)}>
+      <tr css={row} data-testid={`transaction-${row.id}`} onMouseEnter={() => handleHover(row.id)} onMouseLeave={() => handleHover('')}>
         <td css={tableRowCell}>{row.id}</td>
         <td css={tableRowCell}>{row.userId}</td>
         <td css={tableRowCell}>{row.description}</td>
