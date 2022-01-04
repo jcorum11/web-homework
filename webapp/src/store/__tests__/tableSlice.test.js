@@ -1,4 +1,4 @@
-import reducer, { pushData, overwriteData, updateData, deleteData, romanizeData, arabizeData, setCurrentTransactionType, setCurrentAmount, setCurrentTransaction, setIdBeingHoveredOver, setActiveRow, addRowBeneathId } from '../tableSlice'
+import reducer, { pushData, overwriteData, updateData, deleteData, romanizeData, arabizeData, setCurrentTransactionType, setCurrentAmount, setCurrentTransaction, setIdBeingHoveredOver, setActiveRow, addRowBeneathId, setIsRowBeingEdited } from '../tableSlice'
 
 let previousState = {
   allRows: [
@@ -28,7 +28,8 @@ let previousState = {
   currentTransactionType: 'Credit',
   currentAmount: 0,
   idBeingHoveredOver: '',
-  activeRow: {}
+  activeRow: {},
+  isRowBeingEdited: false
 }
 let data = {
   id: '43',
@@ -66,7 +67,8 @@ const cleanup = () => {
     currentTransactionType: 'Credit',
     currentAmount: 0,
     idBeingHoveredOver: '',
-    activeRow: {}
+    activeRow: {},
+    isRowBeingEdited: false
   }
   data = {
     id: '43',
@@ -84,7 +86,8 @@ describe('parserSlice', () => {
       currentTransactionType: '',
       currentAmount: NaN,
       idBeingHoveredOver: '',
-      activeRow: {}
+      activeRow: {},
+      isRowBeingEdited: false
     })
   })
 
@@ -117,20 +120,20 @@ describe('parserSlice', () => {
 
   it('updates only the value whose id matches the id specified with updateData', () => {
     data.id = '42'
-    const returned = reducer(previousState, updateData(data))
-    expect(returned.allRows[returned.allRows.length - 1]).toEqual(data)
+    const received = reducer(previousState, updateData(data))
+    expect(received.allRows[received.allRows.length - 1]).toEqual(data)
     cleanup()
   })
 
   it('deletes the row with id specified with deleteData', () => {
-    const returned = reducer(previousState, deleteData(data))
-    expect(returned.allRows[0]).toEqual(expect.not.arrayContaining([data]))
+    const received = reducer(previousState, deleteData(data))
+    expect(received.allRows[0]).toEqual(expect.not.arrayContaining([data]))
     cleanup()
   })
 
   it('replaces numbers with the roman numeral equivalent with romanizeData', () => {
-    const returned = reducer(previousState, romanizeData())
-    expect(returned.allRows[0].id).toEqual('XL')
+    const received = reducer(previousState, romanizeData())
+    expect(received.allRows[0].id).toEqual('XL')
   })
 
   it('replaces roman numerals with the numeric equivalent arabizeData', () => {
@@ -162,32 +165,32 @@ describe('parserSlice', () => {
       currentTransactionType: 'Credit',
       currentAmount: 0
     }
-    const returned = reducer(previousState, arabizeData())
-    expect(returned.allRows[0].id).toEqual(40)
+    const received = reducer(previousState, arabizeData())
+    expect(received.allRows[0].id).toEqual(40)
     cleanup()
   })
 
   it('overwrites transactionType with setCurrentTransactionType', () => {
-    const returned = reducer(previousState, setCurrentTransactionType('Credit'))
-    expect(returned.currentTransactionType).toEqual('Credit')
+    const received = reducer(previousState, setCurrentTransactionType('Credit'))
+    expect(received.currentTransactionType).toEqual('Credit')
     cleanup()
   })
 
   it('overwrites currentAmount with setCurrentAmount', () => {
-    const returned = reducer(previousState, setCurrentAmount('40'))
-    expect(returned.currentAmount).toEqual(40)
+    const received = reducer(previousState, setCurrentAmount('40'))
+    expect(received.currentAmount).toEqual(40)
     cleanup()
   })
 
   it('overwrites currentTransaction with setCurrrentTransaction', () => {
-    const returned = reducer(previousState, setCurrentTransaction('20'))
-    expect(returned.currentTransaction).toEqual(20)
+    const received = reducer(previousState, setCurrentTransaction('20'))
+    expect(received.currentTransaction).toEqual(20)
     cleanup()
   })
 
   it('overwrites idBeingHoveredOver with setIdBeingHoveredOver', () => {
-    const returned = reducer(previousState, setIdBeingHoveredOver('42'))
-    expect(returned.idBeingHoveredOver).toEqual('42')
+    const received = reducer(previousState, setIdBeingHoveredOver('42'))
+    expect(received.idBeingHoveredOver).toEqual('42')
     cleanup()
   })
   it('gets the active row being edited and overwrites activeRow with setActiveRow', () => {
@@ -197,10 +200,16 @@ describe('parserSlice', () => {
   })
   it('adds a row beneath a defined id, assigns an auto-incrementing id, and calculates amount with addRowBeneathId', () => {
     delete data.id
-    const received = reducer(previousState, addRowBeneathId({ id: '42', data }))
+    const received = reducer(previousState, addRowBeneathId({id: '42', data}))
+    const oldData = JSON.parse(JSON.stringify(data))
     cleanup()
     data.id = '43'
-    console.log(received.allRows)
+    data.credit = oldData.credit
     expect(received.allRows[3]).toEqual(data)
+  })
+  it('overwrites isRowBeingEdited with setIsRowBeingEdited', () => {
+    const received = reducer(previousState, setIsRowBeingEdited(true))
+    expect(received.isRowBeingEdited).toEqual(true)
+    cleanup()
   })
 })

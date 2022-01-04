@@ -8,7 +8,8 @@ export const tableSlice = createSlice({
     currentTransactionType: '',
     currentAmount: NaN,
     idBeingHoveredOver: '',
-    activeRow: {}
+    activeRow: {},
+    isRowBeingEdited: false
   },
   reducers: {
     pushData: (state, action) => {
@@ -119,14 +120,22 @@ export const tableSlice = createSlice({
       }
     },
     addRowBeneathId: (state, action) => {
-      const newRowId = Number(action.payload.id) + 1
-      action.payload.data.id = newRowId.toString()
-      for (let [index, row] of state.allRows.entries()) {
-        if (row.id === newRowId) {
-          state.allRows.splice(index + 1, 0, action.payload.data)
-          console.log(state.allRows)
+      const allRowIds = state.allRows.map(row => {
+        return Number(row.id)
+      })
+      state.allRows.forEach((row, index) => {
+        if (row.id === action.payload.id) {
+          action.payload.data.id = (Math.max(...allRowIds) + 1).toString()
+          if (index !== state.allRows[state.allRows.length - 1]) {
+            state.allRows.splice(index + 1, 0, action.payload.data)
+          } else {
+            state.allRows.push(action.payload.data)
+          }
         }
-      }
+      })
+    },
+    setIsRowBeingEdited: (state, action) => {
+      state.isRowBeingEdited = action.payload
     }
   }
 })
@@ -136,6 +145,7 @@ export const selectCurrentTransaction = state => state.table.currentTransaction
 export const selectCurrentAmount = state => state.table.currentAmount
 export const selectIdBeingHoveredOver = state => state.table.idBeingHoveredOver
 export const selectActiveRow = state => state.table.activeRow
-export const { pushData, overwriteData, updateData, deleteData, romanizeData, arabizeData, setCurrentTransactionType, setCurrentAmount, setCurrentTransaction, setIdBeingHoveredOver, setActiveRow, addRowBeneathId } = tableSlice.actions
+export const selectIsRowBeingEdited = state => state.table.isRowBeingEdited
+export const { pushData, overwriteData, updateData, deleteData, romanizeData, arabizeData, setCurrentTransactionType, setCurrentAmount, setCurrentTransaction, setIdBeingHoveredOver, setActiveRow, addRowBeneathId, setIsRowBeingEdited } = tableSlice.actions
 
 export default tableSlice.reducer

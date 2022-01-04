@@ -20,6 +20,7 @@ export function Table () {
     <Fragment>
       <div css={featureContainer}>
         <div css={tableContainer}>
+          <h3 css={header}>Hover over row for options to Add, Edit, or Delete</h3>
           <div css={tableSpacer}>
             <table className='table' data-testid='table'>
               <tbody>
@@ -72,4 +73,8 @@ color: white;
 `
 const tableSpacer = css`
 padding: 1rem 1rem 0 1rem;
+`
+const header = css`
+width: 100%;
+text-align: center;
 `

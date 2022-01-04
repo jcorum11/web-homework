@@ -1,25 +1,28 @@
 import React, { Fragment, useState } from 'react'
 import { css } from '@emotion/core'
 import { useDispatch, useSelector } from 'react-redux'
-import { deleteData, setIdBeingHoveredOver, selectIdBeingHoveredOver, setActiveRow } from '../../store/tableSlice'
+import { deleteData, setIdBeingHoveredOver, selectIdBeingHoveredOver, setActiveRow, selectIsRowBeingEdited, setIsRowBeingEdited } from '../../store/tableSlice'
 import Form from '../Form'
 import { object } from 'prop-types'
 
 const TableRow = ({ row }) => {
+  const dispatch = useDispatch()
   const idBeingHoveredOver = useSelector(selectIdBeingHoveredOver)
   const [isRow, setIsRow] = useState(true)
-  const dispatch = useDispatch()
   const [currentInputType, setCurrentInputType] = useState('')
+  const isRowBeingEdited = useSelector(selectIsRowBeingEdited)
   const handleClick = (type, id = undefined) => {
     switch (type) {
       case 'add':
         setCurrentInputType(type)
         dispatch(setActiveRow(id))
+        dispatch(setIsRowBeingEdited(true))
         break
       case 'edit':
-        dispatch(setCurrentInputType(type))
         setIsRow(false)
         dispatch(setActiveRow(id))
+        dispatch(setIsRowBeingEdited(true))
+        dispatch(setCurrentInputType(type))
         break
       case 'delete':
         dispatch(deleteData(id))
@@ -27,11 +30,23 @@ const TableRow = ({ row }) => {
       case 'cancel':
         setIsRow(true)
         setCurrentInputType('')
+        dispatch(setIsRowBeingEdited(false))
     }
   }
   const handleHover = (id) => {
     dispatch(setIdBeingHoveredOver(id))
   }
+
+  const Buttons = () => {
+    return (
+      <Fragment>
+        <td><button css={idBeingHoveredOver === row.id ? buttonVisible : buttonHidden} onClick={() => handleClick('add', row.id)}>Add</button></td>
+        <td><button css={idBeingHoveredOver === row.id ? buttonVisible : buttonHidden} onClick={() => handleClick('edit', row.id)}>Edit</button></td>
+        <td><button css={idBeingHoveredOver === row.id ? buttonVisible : buttonHidden} onClick={() => handleClick('delete', row.id)}>Delete</button></td>
+      </Fragment>
+    )
+  }
+
   const Row = () => {
     return (
       <tr css={row} data-testid={`transaction-${row.id}`} onMouseEnter={() => handleHover(row.id)}>
@@ -42,9 +57,7 @@ const TableRow = ({ row }) => {
         <td css={tableRowCell}>{row.debit}</td>
         <td css={tableRowCell}>{row.credit}</td>
         <td css={tableRowCell}>{row.amount}</td>
-        <td><button css={idBeingHoveredOver === row.id ? buttonVisible : buttonHidden} onClick={() => handleClick('add', row.id)}>Add</button></td>
-        <td><button css={idBeingHoveredOver === row.id ? buttonVisible : buttonHidden} onClick={() => handleClick('edit', row.id)}>Edit</button></td>
-        <td><button css={idBeingHoveredOver === row.id ? buttonVisible : buttonHidden} onClick={() => handleClick('delete', row.id)}>Delete</button></td>
+        {!isRowBeingEdited && <Buttons />}
       </tr>
     )
   }

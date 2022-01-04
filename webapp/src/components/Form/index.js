@@ -1,7 +1,8 @@
 import React, { Fragment, useState } from 'react'
 import { func, object, string } from 'prop-types'
 import { useDispatch } from 'react-redux'
-import { addRowBeneathId, updateData } from '../../store/tableSlice'
+import { addRowBeneathId, setIsRowBeingEdited, updateData } from '../../store/tableSlice'
+import { css } from '@emotion/core'
 
 const Form = ({ handleClick, row, currentInputType }) => {
   const [inputValues, setInputValues] = useState(row)
@@ -19,10 +20,12 @@ const Form = ({ handleClick, row, currentInputType }) => {
     switch (type) {
       case 'add':
         dispatch(addRowBeneathId({ id: row.id, data }))
+        dispatch(setIsRowBeingEdited(false))
         handleClick('cancel')
         break
       case 'edit':
         dispatch(updateData(data))
+        dispatch(setIsRowBeingEdited(false))
         handleClick('cancel')
         break
     }
@@ -57,7 +60,7 @@ const Form = ({ handleClick, row, currentInputType }) => {
   return (
     <Fragment>
       <tr >
-        <td><input name='id' onChange={(e) => handleChange('id', e)} type='text' value={inputValues.id} /></td>
+        <td><input css={idInput} name='id' onChange={(e) => handleChange('id', e)} type='text' value={inputValues.id} /></td>
         <td><input name='userId' onChange={(e) => handleChange('userId', e)} type='text' value={inputValues.userId} /></td>
         <td><input name='description' onChange={(e) => handleChange('description', e)} type='text' value={inputValues.description} /></td>
         <td><input name='merchantId' onChange={(e) => handleChange('merchantId', e)} type='text' value={inputValues.merchantId} /></td>
@@ -78,5 +81,9 @@ Form.propTypes = {
   row: object,
   currentInputType: string
 }
+
+const idInput = css`
+visibility: hidden
+`
 
 export default Form
